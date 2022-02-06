@@ -1,6 +1,6 @@
 """
 Unofficial TADPOG Trivia Utility
-Python 3.9
+Python 3.10.2
 01/20/2022
 Dane Burchette
 """
@@ -36,10 +36,13 @@ class Entry:
 
     def _drawing_correct(self):
         """Correct String to Boolean"""
-        if self.responses["drawing"] == "True":
-            return True
-        elif self.responses["drawing"] == "False":
-            return False
+        match self.responses["drawing"]:
+            case "True":
+                return True
+            case "False":
+                return False
+            case _:
+                input(f"You fucked up {self.responses["name"]}'s entry!\nFix it.")
 
     def _load_answers(self):
         """Create dictionary of answers for Entry Class"""
@@ -56,9 +59,12 @@ class Entry:
         """Score answers"""
         self.points = 1
         for key in self.answers.keys():
-            if self.answers[key] == answers[key]:
-                self.points += int(points[key])
-
+            match self.answers[key]:
+                case answers[key]:
+                    self.points += int(points[key])
+                case _:
+                    pass
+            
 class Trivia:
 
     def __init__(self):
@@ -83,39 +89,36 @@ class Trivia:
                     "2 - Print All Entries",
                     "3 - Print All Drawing Participants",
                     "4 - Print All For Fun Participants",
-                    "5 - Quit without Drawing"]
+                    "Q - Quit without Drawing"]
         while True:
             mf._clear_screen()
             for option in menu_list:
                 print(option)
             user_choice = input("\nEnter Choice: ")
-            try:
-                user_choice = int(user_choice)
-            except ValueError:
-                input("Please enter numbers only.")
-            if user_choice == 1:
-                # And the winners are...
-                mf._clear_screen()
-                self.winners = self._draw_all_winners()
-                self.print_winners()
-                break
-            elif user_choice == 2:
-                mf._clear_screen()
-                self.print_entries()
-                input("Enter to Return to Menu")
-            elif user_choice == 3:
-                mf._clear_screen()
-                self.print_entries(drawing=True)
-                input("Enter to Return to Menu")
-            elif user_choice == 4:
-                mf._clear_screen()
-                self.print_entries(drawing=False)
-                input("Enter to Return to Menu")
-            elif user_choice == 5:
-                print("Closing Utility")
-                break
-            else:
-                pass
+            match user_choice:
+                case "1":
+                    # And the winners are...
+                    mf._clear_screen()
+                    self.winners = self._draw_all_winners()
+                    self.print_winners()
+                    break
+                case "2":
+                    mf._clear_screen()
+                    self.print_entries()
+                    input("Enter to Return to Menu")
+                case "3":
+                    mf._clear_screen()
+                    self.print_entries(drawing=True)
+                    input("Enter to Return to Menu")
+                case "4":
+                    mf._clear_screen()
+                    self.print_entries(drawing=False)
+                    input("Enter to Return to Menu")
+                case ("Q"|"q"):
+                    print("Closing Utility")
+                    break
+                case _:
+                    pass
 
 
     def _gen_answers(self, value):
@@ -183,20 +186,21 @@ class Trivia:
 
     def print_entries(self, drawing=None):
         """Print full list of entries"""
-        # Print all
-        if drawing == None:
-            for entry in self.entries:
-                print(entry)
-        # Print only those in drawing.
-        elif drawing == True:
-            for entry in self.entries:
-                if entry:
+        match drawing:
+            case None:
+                # Print all
+                for entry in self.entries:
                     print(entry)
-        # Print only those not in drawing.
-        elif drawing == False:
-            for entry in self.entries:
-                if not entry:
-                    print(entry)
+            case True:
+                # Print only those in drawing.
+                for entry in self.entries:
+                    if entry:
+                        print(entry)
+            case False:
+                # Print only those not in drawing.
+                for entry in self.entries:
+                    if not entry:
+                        print(entry)
 
 
 if __name__ == "__main__":

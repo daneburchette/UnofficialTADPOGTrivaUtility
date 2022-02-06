@@ -1,6 +1,6 @@
 """
 TADPOG Trivia Utility: Settings Module
-Python 3.9
+Python 3.10.2
 01/20/2022
 Dane Burchette
 """
