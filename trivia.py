@@ -6,6 +6,7 @@ Dane Burchette
 """
 
 from random import choice, shuffle
+from sys import exit
 from settings import Settings
 import misc_func as mf
 
@@ -42,7 +43,7 @@ class Entry:
             case "False":
                 return False
             case _:
-                input(f"You fucked up {self.responses["name"]}'s entry!\nFix it.")
+                input(f"You fucked up {self.responses[name]}'s entry!\nFix it.")
 
     def _load_answers(self):
         """Create dictionary of answers for Entry Class"""
@@ -59,11 +60,10 @@ class Entry:
         """Score answers"""
         self.points = 1
         for key in self.answers.keys():
-            match self.answers[key]:
-                case answers[key]:
-                    self.points += int(points[key])
-                case _:
-                    pass
+            if self.answers[key] == answers[key]:
+                self.points += int(points[key])
+            else:
+                pass
             
 class Trivia:
 
@@ -116,7 +116,7 @@ class Trivia:
                     input("Enter to Return to Menu")
                 case ("Q"|"q"):
                     print("Closing Utility")
-                    break
+                    exit()
                 case _:
                     pass
 
